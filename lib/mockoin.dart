@@ -18,7 +18,7 @@ class _MockoinState extends State<Mockoin> {
   static const List<Widget> _widgetOptions = <Widget>[
     Text('Home'),
     Text('Prices'),
-    Text('My Investments'),
+    Text('Portfolio'),
     Text('Account'),
   ];
 
@@ -35,15 +35,15 @@ class _MockoinState extends State<Mockoin> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
             child: GNav(
               gap: 6,
               iconSize: 26,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               duration: const Duration(milliseconds: 400),
               textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
                 color: kColorGreen,
               ),
               rippleColor: kColorGreenLight,
@@ -54,7 +54,7 @@ class _MockoinState extends State<Mockoin> {
               tabs: const [
                 GButton(icon: LineIcons.home, text: 'Home'),
                 GButton(icon: LineIcons.barChartAlt, text: 'Prices'),
-                GButton(icon: LineIcons.wallet, text: 'Investments'),
+                GButton(icon: LineIcons.wallet, text: 'Portfolio'),
                 GButton(icon: LineIcons.userAlt, text: 'Account'),
               ],
               selectedIndex: _selectedIndex,
