@@ -1,5 +1,9 @@
+// Imports: Screens
 import 'package:flutter/material.dart';
 import 'package:mockoin/mockoin.dart';
+
+// Imports: Screens
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Mockoin(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Mockoin(),
+        '/login': (context) => const LoginScreen(),
+      },
     );
   }
 }

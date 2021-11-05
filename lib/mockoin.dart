@@ -15,20 +15,34 @@ class Mockoin extends StatefulWidget {
 class _MockoinState extends State<Mockoin> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Home'),
-    Text('Prices'),
-    Text('Portfolio'),
-    Text('Account'),
-  ];
+  // final List<Widget> _widgetOptions = <Widget>[
+  //   Text('Home'),
+  //   Text('Prices'),
+  //   Text('Portfolio'),
+  //   Center(
+  //     child: Text('Account'),
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kColorLight,
       body: SafeArea(
-        child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      ),
+          // child: _widgetOptions.elementAt(_selectedIndex),
+          child: <Widget>[
+        Text('Home'),
+        Text('Prices'),
+        Text('Portfolio'),
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/login');
+            },
+            child: const Text('Login'),
+          ),
+        ),
+      ].elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: kColorLight,
