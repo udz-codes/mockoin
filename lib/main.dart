@@ -1,11 +1,13 @@
 // Imports: Screens
 import 'package:flutter/material.dart';
 import 'package:mockoin/mockoin.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Imports: Screens
 import 'screens/login_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Mockoin(),
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => LoginScreen(),
       },
     );
   }
