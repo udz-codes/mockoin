@@ -12,7 +12,7 @@ class LogoHeader extends StatelessWidget {
       padding: const EdgeInsets.all(40),
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: kColorBlue,
+        // color: kColorGreenLight,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -23,7 +23,7 @@ class LogoHeader extends StatelessWidget {
           SizedBox(
             width: 150,
             child: Image(
-              image: AssetImage('assets/mockoinWhite.png'),
+              image: AssetImage('assets/mockoinDark.png'),
             ),
           ),
           SizedBox(

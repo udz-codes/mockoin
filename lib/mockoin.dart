@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Mockoin extends StatefulWidget {
   const Mockoin({
@@ -14,7 +15,7 @@ class Mockoin extends StatefulWidget {
 
 class _MockoinState extends State<Mockoin> {
   int _selectedIndex = 0;
-
+  
   // final List<Widget> _widgetOptions = <Widget>[
   //   Text('Home'),
   //   Text('Prices'),
