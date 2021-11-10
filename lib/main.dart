@@ -4,7 +4,8 @@ import 'package:mockoin/mockoin.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Imports: Screens
-import 'screens/login_screen.dart';
+import 'package:mockoin/screens/login_screen.dart';
+import 'package:mockoin/screens/register_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Mockoin(),
         '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
       },
     );
   }

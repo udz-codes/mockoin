@@ -9,27 +9,31 @@ import 'package:mockoin/services/snackbar_service.dart';
 import 'package:mockoin/components/green_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
+
   SnackbarService snackbarService = SnackbarService();
   UserService user = UserService();
 
   bool _loading = false;
 
-  void handleLogin (context) async {
+  void handleRegistration (context) async {
     
     setState(() {
       _loading = true;
     });
 
-    var response  = await user.login(
+    var response  = await user.register(
+      name: nameController.text,
       email: emailController.text,
       password: passwordController.text
     );
@@ -41,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response.statusCode == 200) {
       snackbarService.successToast(
         context: context,
-        text: "Login successful",
+        text: "Registration successful",
       );
 
       Navigator.pop(context);
@@ -57,14 +61,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool validationCheck(context) {
-    if(emailController.text.isEmpty || passwordController.text.isEmpty) {                
+    // bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text);
+
+    // No fields must be empty
+    if(
+      emailController.text.isEmpty
+      || passwordController.text.isEmpty
+      || nameController.text.isEmpty
+      || confirmPassController.text.isEmpty
+    ) {                
       snackbarService.failureToast(
         context: context,
         text: "Please fill all fields",
       );
       return false;
     }
-    
+
+    // Name must eb atleast 3 characters
+    else if (nameController.text.length < 3) {
+      snackbarService.failureToast(
+        context: context,
+        text: "Name must be atleast 3 characters",
+      );
+      return false;
+    }
+
     // Email validation
     else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(emailController.text) != true){
       snackbarService.failureToast(
@@ -73,16 +94,29 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return false;
     }
-
+    
+    // Password must be atleast 8 characters
     else if (passwordController.text.length < 8) {
       snackbarService.failureToast(
         context: context,
         text: "Password must be atleast 8 characters",
       );
       return false;
-    } else {
-      return true;
     }
+    
+    // Password and Confirmation password must be same
+    else if (
+      passwordController.text.length >= 8
+      && confirmPassController.text != passwordController.text
+    ) {
+      snackbarService.failureToast(
+        context: context,
+        text: "Password and Confirmation Password must be same",
+      );
+      return false;
+    }
+
+    return true;
   }
 
   @override
@@ -115,14 +149,19 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.only(left: 30, right: 30),
               child: Column(
                 children: [
                   const Text(
-                    'Login',
+                    'Register',
                     style: kHeadingStyle,
                   ),
                   const SizedBox(height: 30,),
+                  TextInputBar(
+                    placeholder: 'Full Name',
+                    controller: nameController
+                  ),
+                  const SizedBox(height: 10,),
                   TextInputBar(
                     placeholder: 'Email',
                     controller: emailController
@@ -132,18 +171,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     placeholder: 'Password',
                     controller: passwordController,
                     obscureText: true,
+                  ),
+                  const SizedBox(height: 10,),
+                  TextInputBar(
+                    placeholder: 'Confirm Password',
+                    controller: confirmPassController,
+                    obscureText: true,
                     inputAction: TextInputAction.done,
                   ),
                   const SizedBox(height: 10,),
                   RichText(
                     text: TextSpan(
-                      text: "Don't have an account? ",
+                      text: "Already have an account? ",
                       style: const TextStyle(color: Colors.grey, fontSize: 15),
                       children: [
                         TextSpan(
-                          text: 'Register',
+                          text: 'Login',
                           style: const TextStyle(color: kColorBlue),
-                          recognizer: TapGestureRecognizer()..onTap = () => Navigator.pushReplacementNamed(context, '/register')
+                          recognizer: TapGestureRecognizer()..onTap = () => Navigator.pushReplacementNamed(context, '/login')
                         ),
                       ],
                     ),
@@ -152,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RawMaterialButton(
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      if(validationCheck(context)) handleLogin(context);
+                      if(validationCheck(context)) handleRegistration(context);
                     },
                     fillColor: kColorBlue,
                     child: const Icon(

@@ -16,7 +16,7 @@ class SnackbarService {
         margin: const EdgeInsets.all(20),
         behavior: _behavior,
         backgroundColor: backgroundColor,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(milliseconds: 2500),
         content: Text(
           _snackText,
           style: TextStyle(

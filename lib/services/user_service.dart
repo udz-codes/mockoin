@@ -14,9 +14,10 @@ class UserService{
     await _prefs.setString('token', token);
   }
 
-  void _destroyToken() async {
+  void logout({callback}) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     await _prefs.remove('token');
+    callback();
   }
 
   Future login({required String email, required String password}) async {
@@ -36,4 +37,25 @@ class UserService{
     return response;
   }
 
+  Future register ({
+    required String name,
+    required String email,
+    required String password
+  }) async {
+    
+    final _url = Uri.parse(dotenv.env['API'].toString() + "/user/register");
+    
+    http.Response response = await http.post(_url,
+      headers: _headers,
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+        'name': name
+      }),
+    );
+
+    if(response.statusCode == 200) await login(email: email, password: password);
+
+    return response;
+  }
 }
