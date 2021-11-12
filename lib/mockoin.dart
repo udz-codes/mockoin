@@ -77,13 +77,13 @@ class _MockoinState extends State<Mockoin> {
               textStyle: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: kColorGreen,
+                color: kColorLight,
               ),
               rippleColor: kColorGreenLight,
               hoverColor: kColorGreenLight,
               color: kColorGreen,
-              activeColor: kColorGreen,
-              tabBackgroundColor: kColorGreenLight,
+              activeColor: kColorLight,
+              tabBackgroundColor: kColorGreen,
               tabs: const [
                 GButton(icon: LineIcons.home, text: 'Home'),
                 GButton(icon: LineIcons.barChartAlt, text: 'Prices'),
