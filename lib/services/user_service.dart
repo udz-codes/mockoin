@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mockoin/providers/authentication_provider.dart';
 
 class UserService{
-
+  AuthProvider authProvider = AuthProvider();
   final _headers = {
     "Content-Type": "application/json"
   };
@@ -12,12 +15,14 @@ class UserService{
   void _createToken(token) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     await _prefs.setString('token', token);
+    return;
   }
 
-  void logout({callback}) async {
+  void logout({required BuildContext context}) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    await _prefs.remove('token');
-    callback();
+    await _prefs.remove('token').then(
+      (value) => Provider.of<AuthProvider>(context, listen: false).checkToken()
+    );
   }
 
   Future login({required String email, required String password}) async {
@@ -32,7 +37,10 @@ class UserService{
       }),
     );
 
-    if(response.statusCode == 200) _createToken(response.body);
+    if(response.statusCode == 200){
+      _createToken(response.body);
+      authProvider.checkToken();
+    }
 
     return response;
   }

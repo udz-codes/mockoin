@@ -1,15 +1,24 @@
-// Imports: Screens
+// Imports: Packages
 import 'package:flutter/material.dart';
 import 'package:mockoin/mockoin.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 // Imports: Screens
 import 'package:mockoin/screens/login_screen.dart';
 import 'package:mockoin/screens/register_screen.dart';
 
+// Improts: Providers
+import 'providers/authentication_provider.dart';
+
 void main() async {
   await dotenv.load(fileName: ".env");
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider<AuthProvider>(
+      create: (context) => AuthProvider(),
+      child: MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,9 +31,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // home: Scaffold(body: Center(child: Text(context.read<AuthProvider>().getToken)),),
       initialRoute: '/',
       routes: {
-        '/': (context) => const Mockoin(),
+        '/': (context) => Mockoin(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
       },

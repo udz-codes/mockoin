@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:mockoin/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mockoin/services/user_service.dart';
 
@@ -16,52 +18,32 @@ class Mockoin extends StatefulWidget {
 
 class _MockoinState extends State<Mockoin> {
   int _selectedIndex = 0;
-  String _token = '';
+  // String _token = '';
   UserService userService = UserService();
-
-  void loginCheck() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      if(_prefs.getString('token') != null) {
-        _token = _prefs.getString('token')!;
-      } else {
-        _token = '';
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => loginCheck());
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kColorLight,
       body: SafeArea(
-          // child: _widgetOptions.elementAt(_selectedIndex),
-          child: <Widget>[
-        Text('Home'),
-        Text('Prices'),
-        Text('Portfolio'),
-        Center(
-          child: _token.isEmpty ? ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/login').then((value) => loginCheck());
-            },
-            child: const Text('Login'),
-          ) : ElevatedButton(
-            onPressed: () {
-              userService.logout(callback: loginCheck);
-            },
-            child: const Text('Logout'),
+        child: <Widget>[
+          Text("Token: " + Provider.of<AuthProvider>(context).getToken),
+          Text('Prices'),
+          Text('Portfolio'),
+          Center(
+            child: context.watch<AuthProvider>().getToken.isEmpty ? ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              child: const Text('Login'),
+            ) : ElevatedButton(
+              onPressed: () {
+                userService.logout(context: context);
+              },
+              child: const Text('Logout'),
+            ),
           ),
-        ),
-      ].elementAt(_selectedIndex)),
+        ].elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: kColorLight,
