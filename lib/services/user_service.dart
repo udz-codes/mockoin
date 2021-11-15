@@ -8,7 +8,8 @@ import 'package:mockoin/providers/authentication_provider.dart';
 
 class UserService{
   AuthProvider authProvider = AuthProvider();
-  final _headers = {
+  
+  final Map<String, String> _headers = {
     "Content-Type": "application/json"
   };
   
@@ -18,11 +19,33 @@ class UserService{
     return;
   }
 
-  void logout({required BuildContext context}) async {
+  Future logout({required BuildContext context}) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     await _prefs.remove('token').then(
-      (value) => Provider.of<AuthProvider>(context, listen: false).checkToken()
+      (value) {
+        Provider.of<AuthProvider>(context, listen: false).checkToken();
+      }
     );
+  }
+
+  Future fetchUser() async {
+    final _url = Uri.parse(dotenv.env['API'].toString() + "/user");
+    
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? token = _prefs.getString('token');
+
+    if (token != null) {
+      Map<String, String> tempHeader = _headers;
+      tempHeader["auth-token"] = token;
+
+      http.Response response = await http.get(_url, headers: tempHeader);
+
+      if(response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    }
+
+    return {};
   }
 
   Future login({required String email, required String password}) async {
@@ -40,6 +63,9 @@ class UserService{
     if(response.statusCode == 200){
       _createToken(response.body);
       authProvider.checkToken();
+      
+      // Map<dynamic, dynamic> userData = await _fetchUser();
+      // authProvider.setUser(userData);
     }
 
     return response;

@@ -6,6 +6,7 @@ class AuthProvider with ChangeNotifier {
   String _token = '';
 
   String get getToken => _token;
+  bool get isLogged => _token.isNotEmpty;
 
   AuthProvider() {
     checkToken();
@@ -18,13 +19,6 @@ class AuthProvider with ChangeNotifier {
       temp = _sharedPreferences.getString('token')!;
     }
     _token = temp;
-    print("Provider called");
-    // print("Token Value:" + getToken);
-    printToken();
     notifyListeners();
-  }
-
-  void printToken() {
-    print("Token Value:" + getToken);
   }
 }

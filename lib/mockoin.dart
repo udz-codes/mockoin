@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mockoin/providers/authentication_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mockoin/services/user_service.dart';
+
+// Imports: Screens
+import 'package:mockoin/screens/settings_screen.dart';
 
 class Mockoin extends StatefulWidget {
   const Mockoin({
@@ -18,31 +17,17 @@ class Mockoin extends StatefulWidget {
 
 class _MockoinState extends State<Mockoin> {
   int _selectedIndex = 0;
-  // String _token = '';
-  UserService userService = UserService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kColorLight,
       body: SafeArea(
-        child: <Widget>[
-          Text("Token: " + Provider.of<AuthProvider>(context).getToken),
+        child: const <Widget>[
+          Text("Token: "),
           Text('Prices'),
           Text('Portfolio'),
-          Center(
-            child: context.watch<AuthProvider>().getToken.isEmpty ? ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
-              child: const Text('Login'),
-            ) : ElevatedButton(
-              onPressed: () {
-                userService.logout(context: context);
-              },
-              child: const Text('Logout'),
-            ),
-          ),
+          SettingsScreen(),
         ].elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
@@ -53,7 +38,7 @@ class _MockoinState extends State<Mockoin> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
             child: GNav(
               gap: 6,
-              iconSize: 26,
+              iconSize: 28,
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               duration: const Duration(milliseconds: 400),
               textStyle: const TextStyle(
@@ -70,7 +55,7 @@ class _MockoinState extends State<Mockoin> {
                 GButton(icon: LineIcons.home, text: 'Home'),
                 GButton(icon: LineIcons.barChartAlt, text: 'Prices'),
                 GButton(icon: LineIcons.wallet, text: 'Portfolio'),
-                GButton(icon: LineIcons.userAlt, text: 'Account'),
+                GButton(icon: LineIcons.cog, text: 'Settings'),
               ],
               selectedIndex: _selectedIndex,
               onTabChange: (index) {

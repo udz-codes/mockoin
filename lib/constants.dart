@@ -18,6 +18,18 @@ const TextStyle kHeadingStyle = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
+const TextStyle kHeadingStyleMd = TextStyle(
+  color: kColorBlue,
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+);
+
+const TextStyle kHeadingStyleSm = TextStyle(
+  color: kColorBlue,
+  fontSize: 16,
+  fontWeight: FontWeight.w300,
+);
+
 const TextStyle kSmallTextStyle = TextStyle(
   color: kColorLight,
   fontSize: 14,
