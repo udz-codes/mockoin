@@ -6,14 +6,15 @@ class GreenLoader extends StatelessWidget {
 
   final bool loading;
   final Widget child;
+  final Color color;
 
-  GreenLoader({required this.child, required this.loading});
+  GreenLoader({required this.child, required this.loading, this.color = kColorBlue});
 
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
       opacity: 0.7,
-      color: kColorBlue,
+      color: color,
         progressIndicator: const SizedBox(
           height: 70,
           width: 70,

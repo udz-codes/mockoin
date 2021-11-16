@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextSpan(
                           text: 'Register',
                           style: const TextStyle(color: kColorBlue),
-                          recognizer: TapGestureRecognizer()..onTap = () => Navigator.pushReplacementNamed(context, '/register')
+                          recognizer: TapGestureRecognizer()..onTap = () => Navigator.pushNamed(context, '/register')
                         ),
                       ],
                     ),

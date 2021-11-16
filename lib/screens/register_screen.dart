@@ -7,9 +7,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:mockoin/services/user_service.dart';
 import 'package:mockoin/services/snackbar_service.dart';
 import 'package:mockoin/components/green_loader.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
-import 'package:mockoin/providers/authentication_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
 
@@ -50,11 +47,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         text: "Registration successful",
       );
 
-      Provider.of<AuthProvider>(context, listen: false).checkToken();
+      // Provider.of<AuthProvider>(context, listen: false).checkToken();
       Navigator.pop(context);
 
-      SharedPreferences _prefs = await SharedPreferences.getInstance();
-      print(_prefs.getString('token'));
+      // SharedPreferences _prefs = await SharedPreferences.getInstance();
+      // print(_prefs.getString('token'));
     } else {
       snackbarService.failureToast(
         context: context,

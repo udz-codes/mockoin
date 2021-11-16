@@ -4,7 +4,7 @@ import 'package:mockoin/constants.dart';
 class SnackbarService {
   late BuildContext _context;
   late String _snackText;
-  SnackBarBehavior _behavior = SnackBarBehavior.floating;
+  final SnackBarBehavior _behavior = SnackBarBehavior.floating;
 
   void showToast({
     required Color backgroundColor,

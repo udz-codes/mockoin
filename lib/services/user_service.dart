@@ -62,10 +62,6 @@ class UserService{
 
     if(response.statusCode == 200){
       _createToken(response.body);
-      authProvider.checkToken();
-      
-      // Map<dynamic, dynamic> userData = await _fetchUser();
-      // authProvider.setUser(userData);
     }
 
     return response;
@@ -88,7 +84,7 @@ class UserService{
       }),
     );
 
-    if(response.statusCode == 200) await login(email: email, password: password);
+    // if(response.statusCode == 200) await login(email: email, password: password);
 
     return response;
   }

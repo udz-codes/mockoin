@@ -4,6 +4,12 @@ import 'package:mockoin/constants.dart';
 import 'package:mockoin/services/user_service.dart';
 import 'package:mockoin/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:line_icons/line_icons.dart';
+
+// Components
+import 'package:mockoin/components/funds_card.dart';
+import 'package:mockoin/components/touchable_tile.dart';
+
 
 class SettingsScreen extends StatefulWidget {
   
@@ -13,18 +19,22 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
+
 class _SettingsScreenState extends State<SettingsScreen> {
   UserService userService = UserService();
-  Map<dynamic, dynamic> userData = {};
+  
+  Map<dynamic, dynamic> userData = {
+    "name": "...",
+    "email": "...",
+    "funds": "0.0"
+  };
 
   void fetchUser() async {
     Map<dynamic, dynamic> _userData = await userService.fetchUser();
-
     setState(() {
       userData = _userData;
     });
   }
-  
 
   @override
   void initState() {
@@ -35,14 +45,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLogged = context.watch<AuthProvider>().isLogged;
-
     // print(userData);
 
     return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          userData.isNotEmpty ? SizedBox(
+          isLogged ? SizedBox(
             width: double.infinity,
             child: Card(
               margin: EdgeInsets.zero,
@@ -54,9 +63,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(userData["name"], style: kHeadingStyleMd),
+                    Text(userData["name"].toString(), style: kHeadingStyleMd),
                     const SizedBox(height: 5,),
-                    Text(userData["email"], style: kHeadingStyleSm.copyWith(
+                    Text(userData["email"].toString(), style: kHeadingStyleSm.copyWith(
                       color: Colors.grey
                     )),
                   ],
@@ -77,61 +86,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
 
-          isLogged ? ElevatedButton(
-            onPressed: () async {
+          if(isLogged) FundsCard(amount: userData["funds"].toString()),
+          
+          isLogged? TouchableTile(
+            textPrimary: "Logout",
+            icon: Icons.logout,
+            onClick: ()  async{
               await userService.logout(context: context).then((value) => fetchUser());
             },
-            child: const Text('Logout'),
-          ) : ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/login').then((value) => fetchUser());
+          ) : TouchableTile(
+            textPrimary: "Sign up or Login",
+            textSecondary: "Create an account or login",
+            icon: LineIcons.user,
+            onClick: ()  async{
+              await Navigator.pushNamed(context, '/login').then((value) => fetchUser());
             },
-            child: const Text('Login'),
-          ),
+          )
         ],
       ),
     );
   }
 }
-
-// Padding(
-//   padding: const EdgeInsets.all(16),
-//   child: Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//     children: [
-//       Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Image.asset('assets/logoMin.png', height: 40),
-//           const SizedBox(width: 8),
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: const [
-//               Text('Mockoin', style: TextStyle(
-//                 fontSize: 26,
-//                 fontWeight: FontWeight.w300,
-//                 color: kColorBlue
-//               ),),
-//               Text('Risk free investment', style: TextStyle(
-//                 fontSize: 16,
-//                 color: kColorGreen
-//               ),)
-//             ],
-//           ),
-//         ],
-//       ),
-
-//       isLogged ? ElevatedButton(
-//         onPressed: () {
-//           userService.logout(context: context);
-//         },
-//         child: const Text('Logout'),
-//       ) : ElevatedButton(
-//         onPressed: () {
-//           Navigator.pushNamed(context, '/login');
-//         },
-//         child: const Text('Login'),
-//       ),
-//     ],
-//   ),
-// ),
