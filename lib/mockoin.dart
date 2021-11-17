@@ -24,7 +24,6 @@ class _MockoinState extends State<Mockoin> {
       backgroundColor: kColorLight,
       body: SafeArea(
         child: const <Widget>[
-          Text("Token: "),
           Text('Prices'),
           Text('Portfolio'),
           SettingsScreen(),
@@ -35,24 +34,24 @@ class _MockoinState extends State<Mockoin> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 12),
             child: GNav(
-              gap: 6,
-              iconSize: 28,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              gap: 10,
+              iconSize: 32,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               duration: const Duration(milliseconds: 400),
               textStyle: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: kColorLight,
               ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               rippleColor: kColorGreenLight,
               hoverColor: kColorGreenLight,
               color: kColorGreen,
               activeColor: kColorLight,
               tabBackgroundColor: kColorGreen,
               tabs: const [
-                GButton(icon: LineIcons.home, text: 'Home'),
                 GButton(icon: LineIcons.barChartAlt, text: 'Prices'),
                 GButton(icon: LineIcons.wallet, text: 'Portfolio'),
                 GButton(icon: LineIcons.cog, text: 'Settings'),

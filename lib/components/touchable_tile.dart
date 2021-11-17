@@ -18,46 +18,41 @@ class TouchableTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onClick(),
-      child: Container(
-        width: double.infinity,
+      child: Card(
         margin: const EdgeInsets.all(12),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 0.5,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10.0)
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 36,
-              color: Colors.grey
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(textPrimary, style: kHeadingStyleMd),
-                  if (textSecondary.isNotEmpty) Text(textSecondary, style: kHeadingStyleSm.copyWith(
-                    color: Colors.grey
-                  ),)
-                ],
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 34,
+                color: Colors.grey
               ),
-            ),
-            const SizedBox(width: 10),
-            const Icon(
-              Icons.keyboard_arrow_right_rounded,
-              size: 40,
-              color: Colors.grey,
-            ),
-          ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(textPrimary, style: kHeadingStyleMd.copyWith(fontSize: 22)),
+                    if (textSecondary.isNotEmpty) Text(textSecondary, style: kHeadingStyleSm.copyWith(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400
+                    ),)
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Icon(
+                Icons.keyboard_arrow_right_rounded,
+                size: 40,
+                color: Colors.grey,
+              ),
+            ],
+          ),
         ),
       ),
     );

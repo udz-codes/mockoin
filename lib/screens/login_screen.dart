@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text(
                     'Login',
-                    style: kHeadingStyle,
+                    style: kHeadingStyleLg,
                   ),
                   const SizedBox(height: 30,),
                   TextInputBar(

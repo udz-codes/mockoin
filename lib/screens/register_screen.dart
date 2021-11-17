@@ -154,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   const Text(
                     'Register',
-                    style: kHeadingStyle,
+                    style: kHeadingStyleLg,
                   ),
                   const SizedBox(height: 30,),
                   TextInputBar(

@@ -15,6 +15,9 @@ class FundsCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       width: double.infinity,
       child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        color: kColorGreen,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -22,14 +25,17 @@ class FundsCard extends StatelessWidget {
             children: [
               Text(
                 "Funds available to invest",
-                style: kHeadingStyleSm.copyWith(
-                  fontWeight: FontWeight.w400
+                style: kHeadingStyleMd.copyWith(
+                  fontWeight: FontWeight.w400,
+                  color: kColorGreenLight
                 )
               ),
               const SizedBox(height: 6),
               Text(
                 "₹" + amount,
-                style: kHeadingStyle.copyWith(color: kColorGreen)
+                style: kHeadingStyleXl.copyWith(
+                  color: kColorLight
+                )
               )
             ],
           ),

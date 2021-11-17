@@ -26,7 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Map<dynamic, dynamic> userData = {
     "name": "...",
     "email": "...",
-    "funds": "0.0"
+    "funds": "00.0"
   };
 
   void fetchUser() async {
@@ -45,7 +45,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLogged = context.watch<AuthProvider>().isLogged;
-    // print(userData);
 
     return SizedBox(
       width: double.infinity,
@@ -66,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(userData["name"].toString(), style: kHeadingStyleMd),
                     const SizedBox(height: 5,),
                     Text(userData["email"].toString(), style: kHeadingStyleSm.copyWith(
-                      color: Colors.grey
+                      color: kColorDark
                     )),
                   ],
                 ),
@@ -88,12 +87,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           if(isLogged) FundsCard(amount: userData["funds"].toString()),
           
-          isLogged? TouchableTile(
-            textPrimary: "Logout",
-            icon: Icons.logout,
-            onClick: ()  async{
-              await userService.logout(context: context).then((value) => fetchUser());
-            },
+          isLogged? Column(
+            children: [
+              TouchableTile(
+                textPrimary: "Transactions",
+                textSecondary: "List of all past transactions",
+                icon: LineIcons.moneyBill,
+                onClick: () => print('Transactions'),
+              ), TouchableTile(
+                textPrimary: "Logout",
+                icon: Icons.logout,
+                onClick: ()  async{
+                  await userService.logout(context: context).then((value) => fetchUser());
+                },
+              ),
+            ],
           ) : TouchableTile(
             textPrimary: "Sign up or Login",
             textSecondary: "Create an account or login",

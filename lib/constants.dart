@@ -12,7 +12,13 @@ const Color kColorDark = Color(0xff2E2E2E);
 const Color kColorLight = Color(0xfff1f1ef);
 
 // Text Styles
-const TextStyle kHeadingStyle = TextStyle(
+const TextStyle kHeadingStyleXl = TextStyle(
+  color: kColorBlue,
+  fontSize: 56,
+  fontWeight: FontWeight.w600,
+);
+
+const TextStyle kHeadingStyleLg = TextStyle(
   color: kColorBlue,
   fontSize: 34,
   fontWeight: FontWeight.w600,
