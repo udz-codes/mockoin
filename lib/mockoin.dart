@@ -5,6 +5,7 @@ import 'package:line_icons/line_icons.dart';
 
 // Imports: Screens
 import 'package:mockoin/screens/settings_screen.dart';
+import 'package:mockoin/screens/prices_screen.dart';
 
 class Mockoin extends StatefulWidget {
   const Mockoin({
@@ -24,7 +25,7 @@ class _MockoinState extends State<Mockoin> {
       backgroundColor: kColorLight,
       body: SafeArea(
         child: const <Widget>[
-          Text('Prices'),
+          PricesScreen(),
           Text('Portfolio'),
           SettingsScreen(),
         ].elementAt(_selectedIndex)),
