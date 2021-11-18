@@ -30,16 +30,14 @@ class _MockoinState extends State<Mockoin> {
           SettingsScreen(),
         ].elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: kColorLight,
-        ),
+        decoration: const BoxDecoration(color: kColorLight),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
             child: GNav(
               gap: 10,
               iconSize: 32,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               duration: const Duration(milliseconds: 400),
               textStyle: const TextStyle(
                 fontSize: 20,

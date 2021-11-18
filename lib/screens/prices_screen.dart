@@ -23,7 +23,7 @@ class _PricesScreenState extends State<PricesScreen> {
   void callApi() async {
     List data = await cryptoService.getPrices();
     setState(() {
-      pricesData = data;
+      if(data.isNotEmpty) pricesData = data;
     });
   }
 
