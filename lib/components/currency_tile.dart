@@ -35,9 +35,10 @@ class CurrencyTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 42,
+            CircleAvatar(
+              radius: 20,
               child: Image.asset(imageUrl),
+              backgroundColor: Colors.transparent,
             ),
             const SizedBox(width: 14),
             Expanded(

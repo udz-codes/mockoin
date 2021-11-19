@@ -1,42 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mockoin/components/currency_list.dart';
 import 'package:mockoin/constants.dart';
-import 'dart:async';
-// Services
-import 'package:mockoin/services/crypto_service.dart';
 
-// Components
-import 'package:mockoin/components/currency_tile.dart';
-import 'package:mockoin/components/green_loader.dart';
+class PricesScreen extends StatelessWidget {
 
-class PricesScreen extends StatefulWidget {
-  const PricesScreen({ Key? key }) : super(key: key);
-
-  @override
-  _PricesScreenState createState() => _PricesScreenState();
-}
-
-class _PricesScreenState extends State<PricesScreen> {
-  CryptoService cryptoService = CryptoService();
-  late Timer timer;
-  List<dynamic> pricesData = [];
-
-  void callApi() async {
-    if(mounted) {
-      List data = await cryptoService.getPrices();
-      setState(() {
-        if(data.isNotEmpty) pricesData = data;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      callApi();
-      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => callApi());
-    });
-  }
+  const PricesScreen({Key? key}):super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,46 +52,9 @@ class _PricesScreenState extends State<PricesScreen> {
             ),
           ),
 
-          pricesData.isNotEmpty ? Expanded(
-            child: Container(
-              width: double.infinity,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: pricesData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: [
-                      CurrencyTile(
-                        imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
-                        title: pricesData[index]['id'],
-                        symbol: pricesData[index]['symbol'],
-                        price: pricesData[index]['priceUsd'],
-                        change: pricesData[index]['changePercent24Hr']
-                      ),
-                      const Divider(
-                        height: 0,
-                        color: Colors.grey,
-                      )
-                    ],
-                  );
-                }
-              )
-            ),
-          ) : Expanded(
-            child: GreenLoader(
-              color: Colors.grey,
-              loading: true,
-              child: Container(width: double.infinity)
-            )
-          )
+          const CurrencyList()
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 }
