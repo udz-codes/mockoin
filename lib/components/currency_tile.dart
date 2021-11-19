@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
+import 'package:intl/intl.dart';
 
 extension CapExtension on String {
   String get inCaps => '${this[0].toUpperCase()}${this.substring(1)}';
@@ -15,7 +16,8 @@ class CurrencyTile extends StatelessWidget {
     required this.title,
     required this.symbol,
     required this.price,
-    required this.change
+    required this.change,
+    required this.onTap
   }) : super(key: key);
 
   final String imageUrl;
@@ -23,12 +25,14 @@ class CurrencyTile extends StatelessWidget {
   final String symbol;
   final String price;
   final String change;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
+    var f = NumberFormat.currency(locale: "HI", symbol: "₹");
 
     return InkWell(
-      onTap: () => print(title),
+      onTap: () => onTap(),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
         child: Row(
@@ -57,7 +61,7 @@ class CurrencyTile extends StatelessWidget {
               )
             ),
             Text(
-              "\$" + double.parse(price).toStringAsFixed(2),
+              f.format(double.parse(price) * 74),
               style: kHeadingStyleSm.copyWith(
                 color: kColorDark,
                 fontWeight: FontWeight.w500
@@ -73,9 +77,9 @@ class CurrencyTile extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(7),
               child: Text(
-                double.parse(change).toStringAsFixed(2),
+                double.parse(change).isNegative ? double.parse(change).toStringAsFixed(2) + "%" : "+"+ double.parse(change).toStringAsFixed(2) + "%",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: double.parse(change).isNegative ? kColorRed : kColorGreen
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mockoin/components/currency_list.dart';
+import 'package:mockoin/components/currency_list_header.dart';
 import 'package:mockoin/constants.dart';
 
 class PricesScreen extends StatelessWidget {
@@ -36,22 +37,11 @@ class PricesScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-                    child: Row(
-                      children: const [
-                        Expanded(child: Text('COIN NAME', style: kGreySmTextStyle)),
-                        Text('PRICE', style: kGreySmTextStyle),
-                        SizedBox(width: 20),
-                        Text('24H CHANGE', style: kGreySmTextStyle)
-                      ],
-                    ),
-                  ),
+                  const CurrencyListHeader(),
                 ],
               ),
             ),
           ),
-
           const CurrencyList()
         ],
       ),

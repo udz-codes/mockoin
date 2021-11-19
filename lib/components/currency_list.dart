@@ -58,6 +58,7 @@ class _CurrencyListState extends State<CurrencyList> {
               return Column(
                 children: [
                   CurrencyTile(
+                    onTap: () => print(pricesData[index]['id']),
                     imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
                     title: pricesData[index]['id'],
                     symbol: pricesData[index]['symbol'],
