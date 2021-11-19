@@ -42,6 +42,10 @@ const TextStyle kSmallTextStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
+const TextStyle kGreySmTextStyle = TextStyle(
+  color: Colors.grey,
+  fontSize: 12
+);
 
 // Input fields design
 const kTextFieldDecoration = InputDecoration(

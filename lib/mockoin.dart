@@ -26,21 +26,30 @@ class _MockoinState extends State<Mockoin> {
       body: SafeArea(
         child: const <Widget>[
           PricesScreen(),
+          Text('Orders'),
           Text('Portfolio'),
           SettingsScreen(),
         ].elementAt(_selectedIndex)),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(color: kColorLight),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 5.0,
+            ),
+          ]
+        ),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
             child: GNav(
               gap: 10,
-              iconSize: 32,
+              iconSize: 30,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               duration: const Duration(milliseconds: 400),
               textStyle: const TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: kColorLight,
               ),
@@ -52,6 +61,7 @@ class _MockoinState extends State<Mockoin> {
               tabBackgroundColor: kColorGreen,
               tabs: const [
                 GButton(icon: LineIcons.barChartAlt, text: 'Prices'),
+                GButton(icon: LineIcons.alternateExchange, text: 'Orders'),
                 GButton(icon: LineIcons.wallet, text: 'Portfolio'),
                 GButton(icon: LineIcons.cog, text: 'Settings'),
               ],

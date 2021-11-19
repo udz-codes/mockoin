@@ -17,14 +17,16 @@ class PricesScreen extends StatefulWidget {
 
 class _PricesScreenState extends State<PricesScreen> {
   CryptoService cryptoService = CryptoService();
-  Timer? timer;
+  late Timer timer;
   List<dynamic> pricesData = [];
 
   void callApi() async {
-    List data = await cryptoService.getPrices();
-    setState(() {
-      if(data.isNotEmpty) pricesData = data;
-    });
+    if(mounted) {
+      List data = await cryptoService.getPrices();
+      setState(() {
+        if(data.isNotEmpty) pricesData = data;
+      });
+    }
   }
 
   @override
@@ -51,20 +53,29 @@ class _PricesScreenState extends State<PricesScreen> {
                 borderRadius: BorderRadius.circular(0),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 24),
-                    child: Text('Prices', style: kHeadingStyleMd.copyWith(color: kColorGreen)),
+                    padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 18),
+                    child: Column(
+                      children: [
+                        Text('Prices', style: kHeadingStyleMd.copyWith(color: kColorGreen)),
+                        const SizedBox(height: 2),
+                        Text('Realtime prices of Cryptocurrencies', style: kHeadingStyleSm.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400
+                        )),
+                      ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10, left: 14, right: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                     child: Row(
                       children: const [
-                        Expanded(child: Text('COIN NAME', style: TextStyle(color: Colors.grey))),
-                        Text('PRICE', style: TextStyle(color: Colors.grey)),
+                        Expanded(child: Text('COIN NAME', style: kGreySmTextStyle)),
+                        Text('PRICE', style: kGreySmTextStyle),
                         SizedBox(width: 20),
-                        Text('24H CHANGE', style: TextStyle(color: Colors.grey))
+                        Text('24H CHANGE', style: kGreySmTextStyle)
                       ],
                     ),
                   ),
@@ -112,7 +123,7 @@ class _PricesScreenState extends State<PricesScreen> {
 
   @override
   void dispose() {
-    timer?.cancel();
+    timer.cancel();
     super.dispose();
   }
 }
