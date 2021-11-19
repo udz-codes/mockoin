@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
 
@@ -93,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 textPrimary: "Transactions",
                 textSecondary: "List of all past transactions",
                 icon: LineIcons.moneyBill,
-                onClick: () => print('Transactions'),
+                onClick: () => log('Transactions'),
               ), TouchableTile(
                 textPrimary: "Logout",
                 icon: Icons.logout,

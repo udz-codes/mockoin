@@ -10,6 +10,8 @@ import 'package:mockoin/components/green_loader.dart';
 
 class RegisterScreen extends StatefulWidget {
 
+  const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }

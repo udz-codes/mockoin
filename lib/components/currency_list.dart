@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:mockoin/constants.dart';
 import 'dart:async';
 
 // Services
@@ -35,7 +36,7 @@ class _CurrencyListState extends State<CurrencyList> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       callApi();
-      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => callApi());
+      timer = Timer.periodic(const Duration(seconds: 30), (Timer t) => callApi());
     });
   }
   
@@ -58,7 +59,7 @@ class _CurrencyListState extends State<CurrencyList> {
               return Column(
                 children: [
                   CurrencyTile(
-                    onTap: () => print(pricesData[index]['id']),
+                    onTap: () => log(pricesData[index]['id']),
                     imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
                     title: pricesData[index]['id'],
                     symbol: pricesData[index]['symbol'],

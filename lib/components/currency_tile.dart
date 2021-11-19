@@ -3,9 +3,9 @@ import 'package:mockoin/constants.dart';
 import 'package:intl/intl.dart';
 
 extension CapExtension on String {
-  String get inCaps => '${this[0].toUpperCase()}${this.substring(1)}';
-  String get allInCaps => this.toUpperCase();
-  String get capitalizeFirstofEach => "${this[0].toUpperCase()}${this.substring(1)}";
+  String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
+  String get allInCaps => toUpperCase();
+  String get capitalizeFirstofEach => "${this[0].toUpperCase()}${substring(1)}";
 }
 
 class CurrencyTile extends StatelessWidget {

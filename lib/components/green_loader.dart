@@ -8,7 +8,12 @@ class GreenLoader extends StatelessWidget {
   final Widget child;
   final Color color;
 
-  GreenLoader({required this.child, required this.loading, this.color = kColorBlue});
+  const GreenLoader({
+    Key? key,
+    required this.child,
+    required this.loading,
+    this.color = kColorBlue
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

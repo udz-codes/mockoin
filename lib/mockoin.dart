@@ -42,7 +42,7 @@ class _MockoinState extends State<Mockoin> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
             child: GNav(
               gap: 10,
               iconSize: 30,

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
 
 class TouchableTile extends StatelessWidget {
-  TouchableTile({
+  const TouchableTile({
+    Key? key,
     required this.textPrimary,
     this.textSecondary = '',
     required this.icon,
     required this.onClick
-  });
+  }) : super(key: key);
 
   final String textPrimary;
   final String textSecondary;

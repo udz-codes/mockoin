@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
@@ -12,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:mockoin/providers/authentication_provider.dart';
 
 class LoginScreen extends StatefulWidget {
+
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -50,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pop(context);
 
       SharedPreferences _prefs = await SharedPreferences.getInstance();
-      print(_prefs.getString('token'));
+      log(_prefs.getString('token').toString());
     } else {
       snackbarService.failureToast(
         context: context,

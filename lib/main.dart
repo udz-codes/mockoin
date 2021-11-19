@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
       // home: Scaffold(body: Center(child: Text(context.read<AuthProvider>().getToken)),),
       initialRoute: '/',
       routes: {
-        '/': (context) => Mockoin(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
+        '/': (context) => const Mockoin(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
       },
     );
   }

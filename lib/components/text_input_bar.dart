@@ -7,12 +7,13 @@ class TextInputBar extends StatelessWidget {
   final TextInputAction inputAction;
   final bool obscureText;
 
-  TextInputBar({
+  const TextInputBar({
+    Key? key,
     required this.placeholder,
     required this.controller,
     this.obscureText = false,
     this.inputAction = TextInputAction.next
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
