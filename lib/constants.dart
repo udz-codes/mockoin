@@ -68,3 +68,28 @@ const kTextFieldDecoration = InputDecoration(
   filled: true,
   fillColor: kColorGreenLight,
 );
+
+const kTextFieldDecoration2 = InputDecoration(
+  border: OutlineInputBorder(
+    borderSide: BorderSide(color: kColorGreenLight, width: 2.0),
+    borderRadius: BorderRadius.all(Radius.circular(10.0))
+  ),
+  labelText: 'In Rupees',
+  labelStyle: TextStyle(
+    color: kColorGreen
+  ),
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: kColorGreenLight, width: 2.0),
+  ),
+  disabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: kColorGreenLight, width: 0.0),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: kColorGreen, width: 2.0),
+  ),
+  hintStyle: TextStyle(
+    color: kColorGreen,
+    fontWeight: FontWeight.w400
+  ),
+);

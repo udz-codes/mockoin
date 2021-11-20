@@ -10,7 +10,7 @@ extension CapExtension on String {
 
 class CurrencyTile extends StatelessWidget {
   
-  const CurrencyTile({
+  CurrencyTile({
     Key? key,
     required this.imageUrl,
     required this.title,
@@ -27,9 +27,10 @@ class CurrencyTile extends StatelessWidget {
   final String change;
   final Function onTap;
 
+  var f = NumberFormat.currency(locale: "HI", symbol: "₹");
+
   @override
   Widget build(BuildContext context) {
-    var f = NumberFormat.currency(locale: "HI", symbol: "₹");
 
     return InkWell(
       onTap: () => onTap(),

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -9,6 +7,7 @@ import 'package:mockoin/services/crypto_service.dart';
 // Components
 import 'package:mockoin/components/currency_tile.dart';
 import 'package:mockoin/components/green_loader.dart';
+import 'package:mockoin/screens/purchase_screen.dart';
 
 class CurrencyList extends StatefulWidget {
   const CurrencyList({ Key? key }) : super(key: key);
@@ -25,9 +24,11 @@ class _CurrencyListState extends State<CurrencyList> {
   void callApi() async {
     if(mounted) {
       List data = await cryptoService.getPrices();
-      setState(() {
-        if(data.isNotEmpty) pricesData = data;
-      });
+      if(data.isNotEmpty) {
+        setState(() {
+          pricesData = data;
+        });
+      }
     }
   }
 
@@ -36,7 +37,7 @@ class _CurrencyListState extends State<CurrencyList> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       callApi();
-      timer = Timer.periodic(const Duration(seconds: 30), (Timer t) => callApi());
+      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => callApi());
     });
   }
   
@@ -59,7 +60,10 @@ class _CurrencyListState extends State<CurrencyList> {
               return Column(
                 children: [
                   CurrencyTile(
-                    onTap: () => log(pricesData[index]['id']),
+                    onTap: () => Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => PurchaseScreen(id: pricesData[index]['id']))
+                    ),
                     imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
                     title: pricesData[index]['id'],
                     symbol: pricesData[index]['symbol'],

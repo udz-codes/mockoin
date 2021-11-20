@@ -9,6 +9,17 @@ class CryptoService {
     "Authorization": dotenv.env['CTOKEN'].toString()
   };
 
+  Future<Map<dynamic, dynamic>> getAssetPrices(id) async{
+    final _url = Uri.parse(dotenv.env['CAPIWID'].toString() + id);
+    Map<dynamic, dynamic> jsonData = {};
+    http.Response response = await http.get(_url, headers: _headers);
+    
+    if(response.statusCode == 200) {
+      jsonData = (jsonDecode(response.body))["data"];
+    }
+    return jsonData;
+  }
+
   Future<List> getPrices() async{
     final _url = Uri.parse(dotenv.env['CAPI'].toString());
 
