@@ -74,7 +74,6 @@ const kTextFieldDecoration2 = InputDecoration(
     borderSide: BorderSide(color: kColorGreenLight, width: 2.0),
     borderRadius: BorderRadius.all(Radius.circular(10.0))
   ),
-  labelText: 'In Rupees',
   labelStyle: TextStyle(
     color: kColorGreen
   ),

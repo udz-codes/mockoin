@@ -3,12 +3,15 @@ import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 // Services
 import 'package:mockoin/services/crypto_service.dart';
+import 'package:mockoin/services/user_service.dart';
+import 'package:mockoin/services/investment_service.dart';
+import 'package:mockoin/services/snackbar_service.dart';
 
 // Components
-import 'package:mockoin/components/text_input_bar.dart';
 
 extension CapExtension on String {
   String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
@@ -33,8 +36,26 @@ class PurchaseScreen extends StatefulWidget {
 
 class _PurchaseScreenState extends State<PurchaseScreen> {
   CryptoService cryptoService = CryptoService();
+  SnackbarService snackbarService = SnackbarService();
+  UserService userService = UserService();
+  InvestmentService investmentService = InvestmentService();
+
   late Timer timer;
+  bool absorbing = true;
   Map<dynamic, dynamic> pricesData = {};
+
+  Map<dynamic, dynamic> userData = {
+    "name": "...",
+    "email": "...",
+    "funds": "00.0"
+  };
+
+  void fetchUser() async {
+    Map<dynamic, dynamic> _userData = await userService.fetchUser();
+    setState(() {
+      userData = _userData;
+    });
+  }
 
   void callApi() async {
     if(mounted) {
@@ -47,11 +68,37 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     }
   }
 
+  void handlePurchase() async {
+    await investmentService.purchage(
+      crypto: widget.id,
+      inr: rupeeController.text,
+      quantity: cryptoController.text
+    ).then((value) {
+      if(value) {
+        snackbarService.successToast(
+          context: context,
+          text: "Purchase Successful"
+        );
+        Navigator.pop(context);
+      } else {
+        snackbarService.failureToast(
+          context: context,
+          text: "Purchase Failed"
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PurchaseScreen(id: widget.id))
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       callApi();
+      fetchUser();
       timer = Timer.periodic(const Duration(seconds: 30), (Timer t) => callApi());
     });
   }
@@ -133,8 +180,19 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               child: TextField(
                                 onChanged: (value) {
                                   if(value.isNotEmpty) {
+                                    double funds = double.parse(userData['funds']);
                                     var calc = 1/((double.parse(pricesData['priceUsd']) * 74)/double.parse(value));
                                     cryptoController.text = calc.toStringAsFixed(10);
+
+                                    if(double.parse(value) < funds && double.parse(value) > 50) {
+                                      setState(() {
+                                        absorbing = false;
+                                      });  
+                                    } else {
+                                      setState(() {
+                                        absorbing = true;
+                                      });
+                                    }
                                   } else {
                                     cryptoController.text = '';
                                   }
@@ -143,7 +201,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 cursorColor: kColorDark,
-                                decoration: kTextFieldDecoration2,
+                                decoration: kTextFieldDecoration2.copyWith(
+                                  labelText: 'In Rupees'
+                                ),
                               ),
                             ),
                             Padding(
@@ -167,19 +227,66 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                             ),
                             const SizedBox(width: 20),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Funds: ',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w300
+                                )
+                              ),
+                              Text(
+                                f.format(double.parse(userData["funds"])),
+                                style: const TextStyle(
+                                  color: kColorGreen,
+                                  fontWeight: FontWeight.w400
+                                )
+                              ),
+                            ],
+                          )
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  child: const Text('Close BottomSheet'),
-                  onPressed: () => Navigator.pop(context),
+              GestureDetector(
+                onHorizontalDragStart: (details){
+                  if(absorbing) {
+                    snackbarService.failureToast(
+                      context: context,
+                      text: "Value must be greater than 50 and less than ${userData['funds']}"
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: AbsorbPointer(
+                    absorbing: absorbing,
+                    child: SlideAction(
+                      text: "Slide to Confirm Purchase",
+                      onSubmit: () {
+                        handlePurchase();
+                      },
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        color: kColorBlue
+                      ),
+                      animationDuration: const Duration(milliseconds: 100),
+                      sliderRotate: false,
+                      elevation: 0,
+                      innerColor: kColorBlue,
+                      outerColor: kColorGreenLight,
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ) : const Text('Loading...')
         ),
