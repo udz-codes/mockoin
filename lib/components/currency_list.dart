@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:mockoin/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 
 // Services
 import 'package:mockoin/services/crypto_service.dart';
@@ -49,6 +51,8 @@ class _CurrencyListState extends State<CurrencyList> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLogged = context.watch<AuthProvider>().isLogged;
+
     return Container(
       child: pricesData.isNotEmpty ? Expanded(
         child: SizedBox(
@@ -60,10 +64,12 @@ class _CurrencyListState extends State<CurrencyList> {
               return Column(
                 children: [
                   CurrencyTile(
-                    onTap: () => Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => PurchaseScreen(id: pricesData[index]['id']))
-                    ),
+                    onTap: (){
+                      isLogged ? Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => PurchaseScreen(id: pricesData[index]['id']))
+                      ) : Navigator.pushNamed(context, '/login');
+                    },
                     imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
                     title: pricesData[index]['id'],
                     symbol: pricesData[index]['symbol'],

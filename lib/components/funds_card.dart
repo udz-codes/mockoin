@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
+import 'package:intl/intl.dart';
 
 class FundsCard extends StatelessWidget {
-  const FundsCard({
+  
+  FundsCard({
     Key? key,
     required this.amount
   }) : super(key: key);
 
   final String amount;
+  var f = NumberFormat.currency(locale: "HI", symbol: "₹");
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,10 @@ class FundsCard extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                "₹" + amount,
-                style: kHeadingStyleXl.copyWith(
-                  color: kColorLight
+                f.format(double.parse(amount)),
+                style: kHeadingStyleLg.copyWith(
+                  color: kColorLight,
+                  fontWeight: FontWeight.w900
                 )
               )
             ],
