@@ -26,7 +26,7 @@ class InvestmentTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
       child: Card(
-        elevation: 8,
+        elevation: 4,
         child: Column(
           children: [
             Padding(
@@ -47,8 +47,7 @@ class InvestmentTile extends StatelessWidget {
                     ],
                   ),
                   Text(quantity, style: kHeadingStyleSm.copyWith(
-                    color: kColorGreen,
-                    fontWeight: FontWeight.w400
+                    color: kColorGreen
                   )),
                 ],
               ),
@@ -70,15 +69,13 @@ class InvestmentTile extends StatelessWidget {
                         Text(
                           "- ₹" + ((double.parse(current) - double.parse(invested)) * -1).toStringAsFixed(2),
                           style: kHeadingStyleSm.copyWith(
-                            color: kColorRed,
-                            fontWeight: FontWeight.w400
+                            color: kColorRed
                           ),
                         )
                       : Text(
                           "+ ₹" + (double.parse(current) - double.parse(invested)).toStringAsFixed(2),
                           style: kHeadingStyleSm.copyWith(
-                            color: kColorGreen,
-                            fontWeight: FontWeight.w400
+                            color: kColorGreen
                           )
                       ),
                     ],

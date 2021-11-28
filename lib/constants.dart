@@ -33,7 +33,7 @@ const TextStyle kHeadingStyleMd = TextStyle(
 const TextStyle kHeadingStyleSm = TextStyle(
   color: kColorBlue,
   fontSize: 16,
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w400,
 );
 
 const TextStyle kSmallTextStyle = TextStyle(

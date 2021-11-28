@@ -16,7 +16,7 @@ class PageHeader extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Card(
-        elevation: 2,
+        elevation: 4,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
