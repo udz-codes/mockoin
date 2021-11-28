@@ -27,7 +27,7 @@ class CurrencyTile extends StatelessWidget {
   final String change;
   final Function onTap;
 
-  var f = NumberFormat.currency(locale: "HI", symbol: "₹");
+  final NumberFormat f = NumberFormat.currency(locale: "HI", symbol: "₹");
 
   @override
   Widget build(BuildContext context) {

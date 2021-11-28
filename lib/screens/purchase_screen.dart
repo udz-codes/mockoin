@@ -69,7 +69,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   }
 
   void handlePurchase() async {
-    await investmentService.purchage(
+    await investmentService.purchase(
       crypto: widget.id,
       inr: rupeeController.text,
       quantity: cryptoController.text

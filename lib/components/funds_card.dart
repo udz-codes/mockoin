@@ -10,7 +10,7 @@ class FundsCard extends StatelessWidget {
   }) : super(key: key);
 
   final String amount;
-  var f = NumberFormat.currency(locale: "HI", symbol: "₹");
+  final NumberFormat f = NumberFormat.currency(locale: "HI", symbol: "₹");
 
   @override
   Widget build(BuildContext context) {
