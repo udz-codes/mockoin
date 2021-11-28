@@ -27,7 +27,7 @@ class InvestmentService {
     }
 
     return [];
-  }  
+  }
 
   Future<bool> purchase({
     required String crypto,

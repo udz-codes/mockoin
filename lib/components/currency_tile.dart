@@ -62,7 +62,7 @@ class CurrencyTile extends StatelessWidget {
               )
             ),
             Text(
-              f.format(double.parse(price) * 74),
+              f.format(double.parse(price)),
               style: kHeadingStyleSm.copyWith(
                 color: kColorDark,
                 fontWeight: FontWeight.w500

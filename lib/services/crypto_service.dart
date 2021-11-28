@@ -10,7 +10,7 @@ class CryptoService {
   };
 
   Future<Map<dynamic, dynamic>> getAssetPrices(id) async{
-    final _url = Uri.parse(dotenv.env['CAPIWID'].toString() + id);
+    final _url = Uri.parse(dotenv.env['CAPIWID'].toString() + "/" + id);
     Map<dynamic, dynamic> jsonData = {};
     http.Response response = await http.get(_url, headers: _headers);
     
@@ -22,6 +22,20 @@ class CryptoService {
 
   Future<List> getPrices() async{
     final _url = Uri.parse(dotenv.env['CAPI'].toString());
+
+    http.Response response = await http.get(_url, headers: _headers);
+    
+    List jsonData = (jsonDecode(response.body))["data"];
+    
+    if(response.statusCode == 200) {
+      return jsonData;
+    }
+
+    return [];
+  }
+
+  Future<List> getMultiple(ids) async{
+    final _url = Uri.parse(dotenv.env['CAPIWID'].toString() + "?ids=" + ids);
 
     http.Response response = await http.get(_url, headers: _headers);
     

@@ -73,7 +73,7 @@ class _CurrencyListState extends State<CurrencyList> {
                     imageUrl: 'assets/icons/'+pricesData[index]['id']+'.png',
                     title: pricesData[index]['id'],
                     symbol: pricesData[index]['symbol'],
-                    price: pricesData[index]['priceUsd'],
+                    price: (double.parse(pricesData[index]['priceUsd']) * 74).toString(),
                     change: pricesData[index]['changePercent24Hr']
                   ),
                   const Divider(
