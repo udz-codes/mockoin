@@ -10,14 +10,7 @@ import 'package:mockoin/services/crypto_service.dart';
 import 'package:mockoin/services/user_service.dart';
 import 'package:mockoin/services/investment_service.dart';
 import 'package:mockoin/services/snackbar_service.dart';
-
-// Components
-
-extension CapExtension on String {
-  String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
-  String get allInCaps => toUpperCase();
-  String get capitalizeFirstofEach => "${this[0].toUpperCase()}${substring(1)}";
-}
+import 'package:mockoin/string_extension.dart';
 
 
 class PurchaseScreen extends StatefulWidget {
@@ -122,7 +115,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           toolbarHeight: 100,
           leading: IconButton(
             icon: const Icon(
-              LineIcons.alternateLongArrowLeft,
+              Icons.keyboard_arrow_left_rounded,
               color: Colors.grey,
               size: 30,
             ),

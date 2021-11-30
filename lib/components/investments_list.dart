@@ -14,6 +14,8 @@ import 'package:mockoin/components/touchable_tile.dart';
 import 'package:mockoin/components/investment_tile.dart';
 import 'package:mockoin/components/green_loader.dart';
 
+// Screens
+import 'package:mockoin/screens/investment_action_screen.dart';
 
 
 class InvestmentsList extends StatefulWidget {
@@ -31,19 +33,19 @@ class _InvestmentsListState extends State<InvestmentsList> {
   List investments = [];
   List<dynamic> pricesData = [];
   
-  void callApi() async {
+  void getInvestments() async {
     if(mounted) {
       List data = await investmentService.getInvestments();
       setState(() {
         if(data.isNotEmpty) {
           investments = data;
         }
-        updateCurrentPrices().then((value) => loading = false);
+        getCryptoPrices().then((value) => loading = false);
       });
     }
   }
 
-  Future<void> updateCurrentPrices() async {
+  Future<void> getCryptoPrices() async {
     // TODO: A lot of loops, can be improved
 
     List cryptoIds = [];
@@ -78,8 +80,8 @@ class _InvestmentsListState extends State<InvestmentsList> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      callApi();
-      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => updateCurrentPrices());
+      getInvestments();
+      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => getCryptoPrices());
     });
   }
 
@@ -105,13 +107,22 @@ class _InvestmentsListState extends State<InvestmentsList> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InvestmentTile(
-                    title: investments[index]['crypto_id'],
-                    quantity: investments[index]['total_quantity'],
-                    invested: investments[index]['total_amount'],
-                    current: (
-                      (double.parse(pricesData[index]['priceUsd']) * 74) * double.parse(investments[index]['total_quantity'])
-                    ).toStringAsFixed(2),
+                  InkWell(
+                    splashColor: kColorGreenLight,
+                    onTap: () {
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => InvestmentActionScreen(id: pricesData[index]['id']))
+                      ).then((value) => getInvestments());
+                    },
+                    child: InvestmentTile(
+                      title: investments[index]['crypto_id'],
+                      quantity: investments[index]['total_quantity'],
+                      invested: investments[index]['total_amount'],
+                      current: (
+                        (double.parse(pricesData[index]['priceUsd']) * 74) * double.parse(investments[index]['total_quantity'])
+                      ).toStringAsFixed(2),
+                    ),
                   ),
                 ],
               );

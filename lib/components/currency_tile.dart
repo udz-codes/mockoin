@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:mockoin/string_extension.dart';
 
-extension CapExtension on String {
-  String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
-  String get allInCaps => toUpperCase();
-  String get capitalizeFirstofEach => "${this[0].toUpperCase()}${substring(1)}";
-}
 
 class CurrencyTile extends StatelessWidget {
   

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:mockoin/constants.dart';
+import 'package:mockoin/string_extension.dart';
 
-extension CapExtension on String {
-  String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
-  String get allInCaps => toUpperCase();
-  String get capitalizeFirstofEach => "${this[0].toUpperCase()}${substring(1)}";
-}
 
 class InvestmentTile extends StatelessWidget {
   const InvestmentTile({
@@ -46,9 +43,18 @@ class InvestmentTile extends StatelessWidget {
                       )),
                     ],
                   ),
-                  Text(quantity, style: kHeadingStyleSm.copyWith(
-                    color: kColorGreen
-                  )),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Text(
+                      quantity.characters.take(16).toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      style: kHeadingStyleSm.copyWith(
+                        color: kColorGreen,
+                      )
+                    ),
+                  ),
                 ],
               ),
             ),
