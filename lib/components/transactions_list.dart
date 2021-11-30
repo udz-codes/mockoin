@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+// import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mockoin/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
+// import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:mockoin/services/transaction_service.dart';
 
 import 'package:mockoin/components/touchable_tile.dart';
+import 'package:mockoin/components/green_loader.dart';
 
 class TransactionsList extends StatefulWidget {
   const TransactionsList({ Key? key }) : super(key: key);
@@ -17,15 +20,17 @@ class TransactionsList extends StatefulWidget {
 class _TransactionsListState extends State<TransactionsList> {
   TransactionService transactionService = TransactionService();
   List transactions = [];
+  bool loading = true;
   
   void callApi() async {
     if(mounted) {
       List data = await transactionService.getTransactions();
-      if(data.isNotEmpty) {
-        setState(() {
+      setState(() {
+        if(data.isNotEmpty) {
           transactions = data;
-        });
-      }
+        }
+        loading = false;
+      });
     }
   }
 
@@ -41,7 +46,7 @@ class _TransactionsListState extends State<TransactionsList> {
 
     return Container(
       child: isLogged ? Expanded(
-        child: SizedBox(
+        child: transactions.isNotEmpty ? SizedBox(
           width: double.infinity,
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
@@ -69,7 +74,11 @@ class _TransactionsListState extends State<TransactionsList> {
               );
             }
           )
-        )
+        ) : loading ? GreenLoader(
+          color: Colors.grey,
+          loading: true,
+          child: Container(width: double.infinity)
+        ) : const Center(child: Text('No orders made till now'))
       ) : Center(
         child: TouchableTile(
           onClick: () => Navigator.pushNamed(context, '/login'),

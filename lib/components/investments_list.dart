@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mockoin/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,8 @@ import 'package:mockoin/services/crypto_service.dart';
 // Components
 import 'package:mockoin/components/touchable_tile.dart';
 import 'package:mockoin/components/investment_tile.dart';
+import 'package:mockoin/components/green_loader.dart';
+
 
 
 class InvestmentsList extends StatefulWidget {
@@ -23,6 +26,7 @@ class InvestmentsList extends StatefulWidget {
 class _InvestmentsListState extends State<InvestmentsList> {
   InvestmentService investmentService = InvestmentService();
   CryptoService cryptoService = CryptoService();
+  bool loading = true;
   late Timer timer;
   List investments = [];
   List<dynamic> pricesData = [];
@@ -30,16 +34,16 @@ class _InvestmentsListState extends State<InvestmentsList> {
   void callApi() async {
     if(mounted) {
       List data = await investmentService.getInvestments();
-      if(data.isNotEmpty) {
-        setState(() {
+      setState(() {
+        if(data.isNotEmpty) {
           investments = data;
-        });
-        updateCurrentPrices();
-      }
+        }
+        updateCurrentPrices().then((value) => loading = false);
+      });
     }
   }
 
-  void updateCurrentPrices() async {
+  Future<void> updateCurrentPrices() async {
     // TODO: A lot of loops, can be improved
 
     List cryptoIds = [];
@@ -113,7 +117,11 @@ class _InvestmentsListState extends State<InvestmentsList> {
               );
             }
           )
-        ) : const Center(child: Text('Loading'))
+        ) : loading ? GreenLoader(
+          color: Colors.grey,
+          loading: true,
+          child: Container(width: double.infinity)
+        ) : const Center(child: Text('No Investments made'),)
       )
       : Center(
         child: TouchableTile(
