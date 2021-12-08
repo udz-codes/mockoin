@@ -27,11 +27,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mockoin',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: Scaffold(body: Center(child: Text(context.read<AuthProvider>().getToken)),),
       initialRoute: '/',
       routes: {
         '/': (context) => const Mockoin(),

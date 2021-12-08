@@ -39,7 +39,7 @@ class _CurrencyListState extends State<CurrencyList> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       callApi();
-      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => callApi());
+      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => callApi());
     });
   }
   

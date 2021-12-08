@@ -81,7 +81,7 @@ class _InvestmentsListState extends State<InvestmentsList> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       getInvestments();
-      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => getCryptoPrices());
+      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => getCryptoPrices());
     });
   }
 
@@ -107,21 +107,24 @@ class _InvestmentsListState extends State<InvestmentsList> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InkWell(
-                    splashColor: kColorGreenLight,
-                    onTap: () {
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(builder: (context) => InvestmentActionScreen(id: pricesData[index]['id']))
-                      ).then((value) => getInvestments());
-                    },
-                    child: InvestmentTile(
-                      title: investments[index]['crypto_id'],
-                      quantity: investments[index]['total_quantity'],
-                      invested: investments[index]['total_amount'],
-                      current: (
-                        (double.parse(pricesData[index]['priceUsd']) * 74) * double.parse(investments[index]['total_quantity'])
-                      ).toStringAsFixed(2),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                    child: InkWell(
+                      splashColor: kColorGreenLight,
+                      onTap: () {
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => InvestmentActionScreen(id: pricesData[index]['id']))
+                        ).then((value) => getInvestments());
+                      },
+                      child: InvestmentTile(
+                        title: investments[index]['crypto_id'],
+                        quantity: investments[index]['total_quantity'],
+                        invested: investments[index]['total_amount'],
+                        current: (
+                          (double.parse(pricesData[index]['priceUsd']) * 74) * double.parse(investments[index]['total_quantity'])
+                        ).toStringAsFixed(2),
+                      ),
                     ),
                   ),
                 ],

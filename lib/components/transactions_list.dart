@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:mockoin/constants.dart';
+import 'package:mockoin/string_extension.dart';
+import 'package:mockoin/constants.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mockoin/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,13 @@ import 'package:mockoin/components/touchable_tile.dart';
 import 'package:mockoin/components/green_loader.dart';
 
 class TransactionsList extends StatefulWidget {
-  const TransactionsList({ Key? key }) : super(key: key);
+  
+  const TransactionsList({
+    Key? key,
+    this.id = ''
+  }) : super(key: key);
+
+  final String id;
 
   @override
   _TransactionsListState createState() => _TransactionsListState();
@@ -24,7 +31,7 @@ class _TransactionsListState extends State<TransactionsList> {
   
   void callApi() async {
     if(mounted) {
-      List data = await transactionService.getTransactions();
+      List data = widget.id.isEmpty ? await transactionService.getTransactions() : await transactionService.getTransactions(cryptoId: widget.id);
       setState(() {
         if(data.isNotEmpty) {
           transactions = data;
@@ -56,13 +63,46 @@ class _TransactionsListState extends State<TransactionsList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: const EdgeInsets.all(14.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(transactions[index]['action_type']),
-                        Text(transactions[index]['crypto_id'] + "(${transactions[index]['crypto_value']})" ),
-                        Text("₹" + transactions[index]['inr']),
+                        CircleAvatar(
+                          backgroundColor: transactions[index]['action_type'] == "BUY" ? kColorGreenLight : kColorRedLight,
+                          child: transactions[index]['action_type'] == "BUY" ? const Icon(
+                            Icons.arrow_downward_rounded,
+                            color: kColorGreen,
+                          ) : const Icon(
+                            Icons.arrow_upward_rounded,
+                            color: kColorRed,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              transactions[index]['action_type'],
+                              style: kHeadingStyleSm.copyWith(
+                                color: (transactions[index]['action_type'] == "BUY") ? kColorGreen : kColorRed
+                              ),
+                            ),
+                            Text(transactions[index]['crypto_id'].toString().capitalizeFirstofEach, style: kHeadingStyleSm)
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text("₹" + transactions[index]['inr'], style: kHeadingStyleSm.copyWith(
+                                color: kColorDark
+                              )),
+                              Text("${transactions[index]['crypto_value']}", style: kHeadingStyleSm),
+                            ]
+                          ),
+                        )
                       ],
                     ),
                   ),

@@ -91,12 +91,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           
           isLogged? Column(
             children: [
+              // TouchableTile(
+              //   textPrimary: "Transactions",
+              //   textSecondary: "List of all past transactions",
+              //   icon: LineIcons.moneyBill,
+              //   onClick: () => log('Transactions'),
+              // ),
               TouchableTile(
-                textPrimary: "Transactions",
-                textSecondary: "List of all past transactions",
-                icon: LineIcons.moneyBill,
-                onClick: () => log('Transactions'),
-              ), TouchableTile(
                 textPrimary: "Logout",
                 icon: Icons.logout,
                 onClick: ()  async{

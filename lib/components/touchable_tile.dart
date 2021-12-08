@@ -20,7 +20,7 @@ class TouchableTile extends StatelessWidget {
     return GestureDetector(
       onTap: () => onClick(),
       child: Card(
-        margin: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
         child: Padding(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mockoin/constants.dart';
-import 'package:line_icons/line_icons.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -13,9 +12,9 @@ import 'package:mockoin/services/snackbar_service.dart';
 import 'package:mockoin/string_extension.dart';
 
 
-class PurchaseScreen extends StatefulWidget {
+class SellScreen extends StatefulWidget {
 
-  const PurchaseScreen({
+  const SellScreen({
     Key? key,
     required this.id
   }) : super(key: key);
@@ -23,11 +22,11 @@ class PurchaseScreen extends StatefulWidget {
   final String id;
 
   @override
-  State<PurchaseScreen> createState() => _PurchaseScreenState();
+  State<SellScreen> createState() => _SellScreenState();
 }
 
 
-class _PurchaseScreenState extends State<PurchaseScreen> {
+class _SellScreenState extends State<SellScreen> {
   CryptoService cryptoService = CryptoService();
   SnackbarService snackbarService = SnackbarService();
   UserService userService = UserService();
@@ -36,26 +35,27 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   late Timer timer;
   bool absorbing = true;
   Map<dynamic, dynamic> pricesData = {};
+  Map<dynamic, dynamic> investmentData = {};
 
-  Map<dynamic, dynamic> userData = {
-    "name": "...",
-    "email": "...",
-    "funds": "00.0"
-  };
 
-  void fetchUser() async {
-    Map<dynamic, dynamic> _userData = await userService.fetchUser();
-    setState(() {
-      userData = _userData;
-    });
+  void getCryptoPrice() async {
+    if(mounted) {
+      Map<dynamic, dynamic> _data = await cryptoService.getAssetPrices(widget.id);
+      if(_data.isNotEmpty) {
+        setState(() {
+          pricesData = _data;
+        });
+      }
+      checkValues();
+    }
   }
 
-  void callApi() async {
+  void getInvestmentPrice() async {
     if(mounted) {
-      Map<dynamic, dynamic> data = await cryptoService.getAssetPrices(widget.id);
-      if(data.isNotEmpty) {
+      Map<dynamic, dynamic> _data = await investmentService.getSingleInvestment(id: widget.id);
+      if(_data.isNotEmpty) {
         setState(() {
-          pricesData = data;
+          investmentData = _data;
         });
       }
     }
@@ -80,19 +80,43 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => PurchaseScreen(id: widget.id))
+          MaterialPageRoute(builder: (context) => SellScreen(id: widget.id))
         );
       }
     });
+  }
+
+  void checkValues() {
+    String value = rupeeController.text;
+    
+    if(value.isNotEmpty) {
+      double current = double.parse(((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3));
+      var calc = 1/((double.parse(pricesData['priceUsd']) * 74)/double.parse(value));
+      cryptoController.text = calc.toString();
+
+      if(
+        double.parse(value) <= current
+        && double.parse(value) > 50
+        && double.parse(cryptoController.text) <= double.parse(investmentData['total_quantity'])
+      )  {
+        setState(() {
+          absorbing = false;
+        });  
+      } else {
+        setState(() {
+          absorbing = true;
+        });
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      callApi();
-      fetchUser();
-      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => callApi());
+      getCryptoPrice();
+      getInvestmentPrice();
+      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => getCryptoPrice());
     });
   }
   
@@ -148,12 +172,25 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     const SizedBox(height: 50),
                     Column(
                       children: [
-                        Text('Current Price', style: kHeadingStyleSm.copyWith(
-                          color: kColorDark
+                        Text('Invested', style: kHeadingStyleSm.copyWith(
+                          color: Colors.grey
                         )),
                         const SizedBox(height: 5),
                         Text(
-                          f.format(double.parse(pricesData['priceUsd']) * 74),
+                          f.format(double.parse(investmentData['total_amount'])),
+                          style: kHeadingStyleMd,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Column(
+                      children: [
+                        Text('Current', style: kHeadingStyleSm.copyWith(
+                          color: Colors.grey
+                        )),
+                        const SizedBox(height: 5),
+                        Text(
+                          "₹" + ((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3),
                           style: kHeadingStyleMd,
                         ),
                       ],
@@ -161,7 +198,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     const SizedBox(height: 40),
                     Column(
                       children: [
-                        Text('How much do you want to buy?', style: kHeadingStyleSm.copyWith(
+                        Text('How much do you want to sell?', style: kHeadingStyleSm.copyWith(
                           color: kColorDark
                         )),
                         const SizedBox(height: 20),
@@ -173,19 +210,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               child: TextField(
                                 onChanged: (value) {
                                   if(value.isNotEmpty) {
-                                    double funds = double.parse(userData['funds']);
-                                    var calc = 1/((double.parse(pricesData['priceUsd']) * 74)/double.parse(value));
-                                    cryptoController.text = calc.toStringAsFixed(10);
-
-                                    if(double.parse(value) < funds && double.parse(value) > 50) {
-                                      setState(() {
-                                        absorbing = false;
-                                      });  
-                                    } else {
-                                      setState(() {
-                                        absorbing = true;
-                                      });
-                                    }
+                                    checkValues();
                                   } else {
                                     cryptoController.text = '';
                                   }
@@ -209,9 +234,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               flex: 1,
                               child: TextField(
                                 controller: cryptoController,
-                                enabled: false,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
+                                enabled: false,
                                 cursorColor: kColorDark,
                                 decoration: kTextFieldDecoration2.copyWith(
                                   labelText: 'In ${pricesData['symbol']}'
@@ -226,20 +251,30 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           width: double.infinity,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              const Text(
-                                'Funds: ',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w300
-                                )
-                              ),
-                              Text(
-                                f.format(double.parse(userData["funds"])),
-                                style: const TextStyle(
-                                  color: kColorDark,
-                                  fontWeight: FontWeight.w400
-                                )
+                              GestureDetector(
+                                onTap: () {
+                                  cryptoController.text = investmentData['total_quantity'];
+                                  rupeeController.text = (
+                                    (double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])
+                                  ).toStringAsFixed(3);
+                                  
+                                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                                  if (!currentFocus.hasPrimaryFocus) {
+                                    currentFocus.unfocus();
+                                  }
+                                },
+                                child: Text(
+                                  investmentData['total_quantity'] + " " + pricesData['symbol'],
+                                  style: const TextStyle(
+                                    color: kColorBlue,
+                                    fontWeight: FontWeight.w400,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Colors.grey
+                                  )
+                                ),
                               ),
                             ],
                           )
@@ -254,7 +289,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   if(absorbing) {
                     snackbarService.failureToast(
                       context: context,
-                      text: "Value must be greater than 50 and less than ${userData['funds']}"
+                      text: "Value must be at least 50 and less than Current value"
                     );
                   }
                 },
@@ -263,9 +298,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   child: AbsorbPointer(
                     absorbing: absorbing,
                     child: SlideAction(
-                      text: "Slide to Confirm Purchase",
+                      text: "Slide to Confirm Sale",
                       onSubmit: () {
-                        handlePurchase();
+                        // handlePurchase();
+                        print('sold');
                       },
                       textStyle: const TextStyle(
                         fontSize: 16,

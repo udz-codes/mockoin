@@ -9,11 +9,16 @@ class TransactionService {
     "Content-Type": "application/json"
   };
 
-  Future<List> getTransactions() async{
+  Future<List> getTransactions({cryptoId = ''}) async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? token = _prefs.getString('token');
+    final Uri _url;
 
-    final _url = Uri.parse(dotenv.env['API'].toString() + "/transactions");
+    if(cryptoId.toString().isEmpty) {
+      _url = Uri.parse(dotenv.env['API'].toString() + "/transactions");
+    } else {
+      _url = Uri.parse(dotenv.env['API'].toString() + "/transactions/" + cryptoId.toString());
+    }
 
     if (token != null) {
       Map<String, String> tempHeader = _headers;

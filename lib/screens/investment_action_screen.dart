@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mockoin/components/transactions_list.dart';
 import 'package:mockoin/screens/purchase_screen.dart';
+import 'package:mockoin/screens/sell_screen.dart';
 import 'package:mockoin/string_extension.dart';
 import 'package:mockoin/constants.dart';
 import 'dart:async';
@@ -66,7 +68,7 @@ class _InvestmentActionScreenState extends State<InvestmentActionScreen> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       getInvestment();
-      timer = Timer.periodic(const Duration(seconds: 60), (Timer t) => getCrypto());
+      timer = Timer.periodic(const Duration(seconds: 15), (Timer t) => getCrypto());
     });
   }
   
@@ -108,15 +110,18 @@ class _InvestmentActionScreenState extends State<InvestmentActionScreen> {
             Expanded(
               child: investment.isNotEmpty && priceData.isNotEmpty ? Column(
                 children: [
-                  InvestmentTile(
-                    invested: investment["total_amount"],
-                    quantity: investment["total_quantity"],
-                    title: widget.id,
-                    current: (
-                      (double.parse(priceData['priceUsd']) * 74) * double.parse(investment['total_quantity'])
-                    ).toStringAsFixed(2),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: InvestmentTile(
+                      invested: investment["total_amount"],
+                      quantity: investment["total_quantity"],
+                      title: widget.id,
+                      current: (
+                        (double.parse(priceData['priceUsd']) * 74) * double.parse(investment['total_quantity'])
+                      ).toStringAsFixed(2),
+                    ),
                   ),
-                  Expanded(child: Container()),
+                  TransactionsList(id: widget.id),
                 ],
               ) : const Text('loading')
             ),
@@ -148,7 +153,12 @@ class _InvestmentActionScreenState extends State<InvestmentActionScreen> {
                   const SizedBox(width: 14),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => SellScreen(id: widget.id))
+                        ).then((value) => getInvestment());
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(14),
                         primary: kColorRed
