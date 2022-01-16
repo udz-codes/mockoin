@@ -175,7 +175,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                                   if(value.isNotEmpty) {
                                     double funds = double.parse(userData['funds']);
                                     var calc = 1/((double.parse(pricesData['priceUsd']) * 74)/double.parse(value));
-                                    cryptoController.text = calc.toStringAsFixed(10);
+                                    cryptoController.text = calc.toString();
 
                                     if(double.parse(value) < funds && double.parse(value) > 50) {
                                       setState(() {

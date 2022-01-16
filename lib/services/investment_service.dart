@@ -80,4 +80,39 @@ class InvestmentService {
 
     return false;
   }
+
+
+  Future<bool> sell({
+    required String crypto,
+    required String quantity,
+    required String amount
+  }) async{
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? token = _prefs.getString('token');
+
+    final _url = Uri.parse(dotenv.env['API'].toString() + '/investments/sell');
+    
+    if (token != null) {
+      Map<String, String> tempHeader = _headers;
+      tempHeader["auth-token"] = token;
+
+      http.Response response = await http.post(
+        _url,
+        headers: tempHeader,
+        body: jsonEncode({
+          'crypto_id': crypto,
+          'quantity': quantity,
+          'amount': amount
+        })
+      );
+
+      print(response.body);
+
+      if(response.statusCode == 200) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

@@ -33,7 +33,7 @@ class _SellScreenState extends State<SellScreen> {
   InvestmentService investmentService = InvestmentService();
 
   late Timer timer;
-  bool absorbing = true;
+  bool absorbing = false;
   Map<dynamic, dynamic> pricesData = {};
   Map<dynamic, dynamic> investmentData = {};
 
@@ -61,22 +61,22 @@ class _SellScreenState extends State<SellScreen> {
     }
   }
 
-  void handlePurchase() async {
-    await investmentService.purchase(
+  void handleSale() async {
+    await investmentService.sell(
       crypto: widget.id,
-      inr: rupeeController.text,
+      amount: rupeeController.text,
       quantity: cryptoController.text
     ).then((value) {
       if(value) {
         snackbarService.successToast(
           context: context,
-          text: "Purchase Successful"
+          text: "Sale Successful"
         );
         Navigator.pop(context);
       } else {
         snackbarService.failureToast(
           context: context,
-          text: "Purchase Failed"
+          text: "Sale Failed"
         );
         Navigator.pushReplacement(
           context,
@@ -90,23 +90,23 @@ class _SellScreenState extends State<SellScreen> {
     String value = rupeeController.text;
     
     if(value.isNotEmpty) {
-      double current = double.parse(((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3));
+      // double current = double.parse(((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3));
       var calc = 1/((double.parse(pricesData['priceUsd']) * 74)/double.parse(value));
       cryptoController.text = calc.toString();
 
-      if(
-        double.parse(value) <= current
-        && double.parse(value) > 50
-        && double.parse(cryptoController.text) <= double.parse(investmentData['total_quantity'])
-      )  {
-        setState(() {
-          absorbing = false;
-        });  
-      } else {
-        setState(() {
-          absorbing = true;
-        });
-      }
+      // if(
+      //   double.parse(value) <= current
+      //   && double.parse(value) > 50
+      //   && double.parse(cryptoController.text) <= double.parse(investmentData['total_quantity'])
+      // )  {
+      //   setState(() {
+      //     absorbing = false;
+      //   });  
+      // } else {
+      //   setState(() {
+      //     absorbing = true;
+      //   });
+      // }
     }
   }
 
@@ -177,7 +177,7 @@ class _SellScreenState extends State<SellScreen> {
                         )),
                         const SizedBox(height: 5),
                         Text(
-                          f.format(double.parse(investmentData['total_amount'])),
+                          investmentData.isNotEmpty ? f.format(double.parse(investmentData['total_amount'])) : '',
                           style: kHeadingStyleMd,
                         ),
                       ],
@@ -190,7 +190,7 @@ class _SellScreenState extends State<SellScreen> {
                         )),
                         const SizedBox(height: 5),
                         Text(
-                          "₹" + ((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3),
+                          (pricesData.isNotEmpty && investmentData.isNotEmpty) ? "₹" + ((double.parse(pricesData['priceUsd']) * 74) * double.parse(investmentData['total_quantity'])).toStringAsFixed(3) : '',
                           style: kHeadingStyleMd,
                         ),
                       ],
@@ -267,7 +267,7 @@ class _SellScreenState extends State<SellScreen> {
                                   }
                                 },
                                 child: Text(
-                                  investmentData['total_quantity'] + " " + pricesData['symbol'],
+                                  (investmentData.isNotEmpty && pricesData.isNotEmpty) ? investmentData['total_quantity'] + " " + pricesData['symbol'] : '',
                                   style: const TextStyle(
                                     color: kColorBlue,
                                     fontWeight: FontWeight.w400,
@@ -300,8 +300,8 @@ class _SellScreenState extends State<SellScreen> {
                     child: SlideAction(
                       text: "Slide to Confirm Sale",
                       onSubmit: () {
-                        // handlePurchase();
-                        print('sold');
+                        handleSale();
+                        // print('sold');
                       },
                       textStyle: const TextStyle(
                         fontSize: 16,

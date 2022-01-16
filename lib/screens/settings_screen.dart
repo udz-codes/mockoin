@@ -33,9 +33,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void fetchUser() async {
     Map<dynamic, dynamic> _userData = await userService.fetchUser();
-    setState(() {
-      userData = _userData;
-    });
+    if(_userData.isNotEmpty) {
+      setState(() {
+        userData = _userData;
+      });
+    }
   }
 
   @override
